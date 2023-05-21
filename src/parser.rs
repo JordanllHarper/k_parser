@@ -44,4 +44,47 @@ pub mod parser {
 
         return vector_of_tokens;
     }
+    pub fn filter_string(tokens: Vec<Token>) -> Vec<Token> {
+        let mut current_body: Vec<Token> = Vec::new();
+
+        let mut record_token = false;
+        for token in tokens {
+            if token.body == "\"" && record_token {
+                record_token = false;
+                continue;
+            }
+            if token.body == "\"" {
+                record_token = true;
+                continue;
+            }
+
+            if record_token {
+                current_body.push(token)
+            }
+        }
+        current_body
+    }
+
+    pub fn filter_brackets(tokens: Vec<Token>) -> Vec<Token> {
+        let mut current_body: Vec<Token> = Vec::new();
+
+        let mut record_in_brackets = false;
+        for token in tokens {
+            if token.body == "(" {
+                record_in_brackets = true;
+                continue;
+            }
+            if token.body == ")" {
+                record_in_brackets = false;
+                continue;
+            }
+
+            if !record_in_brackets {
+                continue;
+            }
+
+            current_body.push(token);
+        }
+        current_body
+    }
 }

@@ -2,7 +2,7 @@
 mod tests {
     use std::collections::HashMap;
 
-    use crate::parser::parser::{parse_into_tokens, Token};
+    use crate::parser::parser::{filter_brackets, filter_string, parse_into_tokens, Token};
 
     #[test]
     fn it_works() {
@@ -40,5 +40,42 @@ mod tests {
         assert_eq!(expected[3].body, actual[3].body);
         assert_eq!(expected[4].body, actual[4].body);
         assert_eq!(expected[5].body, actual[5].body);
+    }
+
+    #[test]
+    fn parser_filter_brackets_test() {
+        let data = vec![
+            Token::new(String::from("(")),
+            Token::new(String::from("\"")),
+            Token::new(String::from("Hello, World!")),
+            Token::new(String::from("\"")),
+            Token::new(String::from(")")),
+        ];
+
+        let expected = vec![
+            Token::new(String::from("\"")),
+            Token::new(String::from("Hello, World!")),
+            Token::new(String::from("\"")),
+        ];
+
+        let actual = filter_brackets(data);
+
+        assert_eq!(expected[0].body, actual[0].body);
+        assert_eq!(expected[1].body, actual[1].body);
+        assert_eq!(expected[2].body, actual[2].body);
+    }
+    #[test]
+    fn parser_filter_string_test() {
+        let data = vec![
+            Token::new(String::from("\"")),
+            Token::new(String::from("Hello, World!")),
+            Token::new(String::from("\"")),
+        ];
+
+        let expected = vec![Token::new(String::from("Hello, World!"))];
+
+        let actual = filter_string(data);
+
+        assert_eq!(expected[0].body, actual[0].body);
     }
 }

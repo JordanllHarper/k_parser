@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use crate::parser::parser::parse_into_tokens;
 
+mod operator;
 mod parser;
 mod tests;
 mod token_analyser;
