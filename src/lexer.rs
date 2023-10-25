@@ -4,21 +4,27 @@ use std::collections::HashMap;
 #[derive(Debug, PartialEq, Clone)]
 enum Token {
     // Anything that isn't a designated token
-    StringSymbol { symbol: String }, //e.g. fun [main]() or "[Hello],[World]"
+    StringSymbol { symbol: String }, //e.g. [fun] [main]() or "[Hello],[World]"
     // ()
     LeftBracket,
     RightBracket,
     // {}
     LeftSquirly,
     RightSquirly,
-    // println
     // " || '
     Quote,
     // ,
     Comma,
+    // [ ]
     Space,
+    // +
     Plus,
+    // -
     Minus,
+    // ==
+    Assign,
+    // =
+    Equals,
 }
 
 #[derive(Debug, Clone)]
@@ -28,20 +34,38 @@ struct Lexer {
     character: Option<char>,
 }
 impl Lexer {
+    fn peek_for_operator(
+        &self,
+        value_to_check_for: char,
+        default_value: Token,
+        matched_value: Token,
+    ) -> Token {
+        let advance_char = self.advance().character;
+        if let Some(next_char) = advance_char {
+            if next_char == value_to_check_for {
+                return matched_value;
+            } else {
+                return default_value;
+            };
+        };
+        default_value
+    }
     fn advance(&self) -> Lexer {
+        let new_position = self.position + 1;
+        let new_char = self.input.chars().nth(new_position);
         Lexer {
-            position: self.position + 1,
+            position: new_position,
             input: self.input.clone(),
-            character: self.character,
+            character: new_char,
         }
     }
 
     fn new(input: String) -> Lexer {
-        let character = input.chars().next();
+        let first_char = input.chars().nth(0);
         Lexer {
             input,
             position: 0,
-            character,
+            character: first_char,
         }
     }
 
@@ -59,10 +83,11 @@ impl Lexer {
                     ',' => Token::Comma,
                     ' ' => Token::Space,
                     '+' => Token::Plus,
-                    '=' => Token::Minus,
-                    _ => Token::StringSymbol {
-                        symbol: String::from("todo"),
-                    },
+                    '-' => Token::Minus,
+                    '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
+                    _ => {
+                        todo!()
+                    }
                 };
 
                 Some(token)
@@ -166,6 +191,45 @@ mod tests {
     fn double_quote_input_success() {
         let lexer = Lexer::new(String::from("\""));
         let expected = Token::Quote;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn plus_input_success() {
+        let lexer = Lexer::new(String::from("+"));
+        let expected = Token::Plus;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn minus_input_success() {
+        let lexer = Lexer::new(String::from("-"));
+        let expected = Token::Minus;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn assign_input_success() {
+        let lexer = Lexer::new(String::from("="));
+        let expected = Token::Assign;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn equality_input_success() {
+        let lexer = Lexer::new(String::from("=="));
+        let expected = Token::Equals;
 
         let actual = lexer.next_token().1.unwrap();
 
