@@ -2,9 +2,22 @@ use std::collections::HashMap;
 
 // Tokens in the basic hello world application ()
 #[derive(Debug, PartialEq, Clone)]
+enum BuiltInIdent {
+    Fun,
+    Println,
+    Val,
+    Var,
+}
+
+enum IdentConsume {
+    FoundIdent(Token),
+    ContinueString(String),
+}
+
+#[derive(Debug, PartialEq, Clone)]
 enum Token {
     // Anything that isn't a designated token
-    StringSymbol { symbol: String }, //e.g. [fun] [main]() or "[Hello],[World]"
+    StringSymbol { symbol: String }, //e.g.  "[Hello],[World]"
     // ()
     LeftBracket,
     RightBracket,
@@ -25,8 +38,12 @@ enum Token {
     Assign,
     // =
     Equals,
+    // !
     Bang,
+    // !=
     DoesNotEqual,
+    // val, var, fun, println, etc...
+    Ident(BuiltInIdent),
 }
 
 #[derive(Debug, Clone)]
@@ -51,6 +68,26 @@ impl Lexer {
             };
         };
         default_value
+    }
+
+    fn peek_for_identifier(&self, current_char: char) -> Token {
+        // Advance gives lexer - with a single char
+        //
+
+        while let advance =  {
+            
+        }
+        
+    }
+
+    fn advance_for_ident(&self, current_string: &str) -> IdentConsume {
+        match current_string {
+            "val" => IdentConsume::FoundIdent(Token::Ident(BuiltInIdent::Val)),
+            "var" => IdentConsume::FoundIdent(Token::Ident(BuiltInIdent::Var)),
+            "fun" => IdentConsume::FoundIdent(Token::Ident(BuiltInIdent::Fun)),
+            "println" => IdentConsume::FoundIdent(Token::Ident(BuiltInIdent::Println)),
+            _ => IdentConsume::ContinueString(current_string.to_string())
+        }
     }
     fn advance(&self) -> Lexer {
         let new_position = self.position + 1;
@@ -89,7 +126,8 @@ impl Lexer {
                     '!' => self.peek_for_operator('=', Token::Bang, Token::DoesNotEqual),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
                     _ => {
-                        todo!()
+                        // some sort of string value
+                        self.peek_for_identifier(c)
                     }
                 };
 
@@ -118,7 +156,7 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ()> {
 
 #[cfg(test)]
 mod tests {
-    use crate::lexer::Lexer;
+    use crate::lexer::{self, Lexer};
 
     use super::{tokenize, Token};
 
@@ -252,6 +290,16 @@ mod tests {
     fn does_not_equal_input_success() {
         let lexer = Lexer::new(String::from("!="));
         let expected = Token::DoesNotEqual;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn println_input_success() {
+        let lexer = Lexer::new(String::from("println"));
+        let expected = Token::Ident(lexer::BuiltInIdent::Prinln);
 
         let actual = lexer.next_token().1.unwrap();
 
