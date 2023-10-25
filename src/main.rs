@@ -1,11 +1,5 @@
+mod lexer;
 use std::collections::HashMap;
-
-use crate::parser::parser::parse_into_tokens;
-
-mod operator;
-mod parser;
-mod tests;
-mod token_analyser;
 
 fn main() {
     let mut delimiters = HashMap::new();
@@ -13,11 +7,5 @@ fn main() {
     delimiters.insert(String::from("("), String::from("("));
     delimiters.insert(String::from(")"), String::from(")"));
     delimiters.insert(String::from("\""), String::from("\""));
-
     let line = String::from("println(\"Hello, World!\")");
-
-    let tokens = parse_into_tokens(line, &delimiters);
-    for token in tokens {
-        println!("Token: {:?}", token);
-    }
 }
