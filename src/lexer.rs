@@ -25,6 +25,8 @@ enum Token {
     Assign,
     // =
     Equals,
+    Bang,
+    DoesNotEqual,
 }
 
 #[derive(Debug, Clone)]
@@ -84,6 +86,7 @@ impl Lexer {
                     ' ' => Token::Space,
                     '+' => Token::Plus,
                     '-' => Token::Minus,
+                    '!' => self.peek_for_operator('=', Token::Bang, Token::DoesNotEqual),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
                     _ => {
                         todo!()
@@ -230,6 +233,25 @@ mod tests {
     fn equality_input_success() {
         let lexer = Lexer::new(String::from("=="));
         let expected = Token::Equals;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn bang_input_success() {
+        let lexer = Lexer::new(String::from("!"));
+        let expected = Token::Bang;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn does_not_equal_input_success() {
+        let lexer = Lexer::new(String::from("!="));
+        let expected = Token::DoesNotEqual;
 
         let actual = lexer.next_token().1.unwrap();
 
