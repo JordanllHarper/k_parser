@@ -4,7 +4,7 @@ use std::collections::HashMap;
 #[derive(Debug, PartialEq, Clone)]
 enum Token {
     //fun
-    Fun, //e.g. [fun] main()
+    Fun,
     //Anything that isn't a designated token
     StringSymbol { symbol: String }, //e.g. fun [main]() or "[Hello],[World]"
     // ()
@@ -19,6 +19,7 @@ enum Token {
     Quote,
     // ,
     Comma,
+    Space,
 }
 
 fn tokenize(input: &str) -> Result<Vec<Token>, ()> {
@@ -31,12 +32,13 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ()> {
         (String::from("println"), Token::Println),
         (String::from("\""), Token::Quote),
         (String::from(","), Token::Comma),
+        (String::from(" "), Token::Space),
     ]);
     //Remove spaces
     let tokens: Vec<Token> = input
-        .split(' ')
+        .chars()
         .map(|v| {
-            let token = &map[v];
+            let token = &map[&v.to_string()];
             token.clone()
         })
         .collect::<Vec<Token>>();
@@ -55,14 +57,7 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ()> {
 
 #[cfg(test)]
 mod tests {
-
     use super::{tokenize, Token};
-
-    #[test]
-    fn it_passes() {
-        assert_eq!(2 + 2, 4)
-    }
-
     #[test]
     fn tokenize_with_fun_keyword() {
         let expected = vec![Token::Fun];
@@ -127,5 +122,23 @@ mod tests {
         let actual = tokenize(",").unwrap();
 
         assert_eq!(expected[0], actual[0]);
+    }
+    #[test]
+    fn tokenize_with_lbrb_symbols() {
+        let expected = vec![Token::LeftBracket, Token::Space, Token::RightBracket];
+
+        let actual = tokenize("( )").unwrap();
+
+        assert_eq!(expected[0], actual[0]);
+        assert_eq!(expected[1], actual[1]);
+    }
+    #[test]
+    fn tokenize_with_lsrs_symbols() {
+        let expected = vec![Token::LeftSquirly, Token::Space, Token::RightSquirly];
+
+        let actual = tokenize("{ }").unwrap();
+
+        assert_eq!(expected[0], actual[0]);
+        assert_eq!(expected[1], actual[1]);
     }
 }
