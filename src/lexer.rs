@@ -17,6 +17,8 @@ enum Token {
     // ,
     Comma,
     Space,
+    Plus,
+    Minus,
 }
 
 #[derive(Debug, Clone)]
@@ -25,36 +27,17 @@ struct Lexer {
     input: String,
     character: Option<char>,
 }
-fn map_character(character: Option<&char>) -> Option<Token> {
-    match character {
-        Some(c) => {
-            let character_map: HashMap<char, Token> = HashMap::from([
-                ('(', Token::LeftBracket),
-                (')', Token::RightBracket),
-                ('{', Token::LeftSquirly),
-                ('}', Token::RightSquirly),
-                ('\"', Token::Quote),
-                ('\'', Token::Quote),
-                (',', Token::Comma),
-                (' ', Token::Space),
-            ]);
-
-            character_map.get(c).cloned()
-        }
-        None => None,
-    }
-}
-// fn map_keyword(keyword: &String) -> Option<Token> {
-//     let keyword_map: HashMap<String, Token> = HashMap::from([
-//         (String::from("fun"), Token::Fun),
-//         (String::from("println"), Token::Println),
-//     ]);
-//     keyword_map.get(keyword).cloned()
-// }
 impl Lexer {
+    fn advance(&self) -> Lexer {
+        Lexer {
+            position: self.position + 1,
+            input: self.input.clone(),
+            character: self.character,
+        }
+    }
+
     fn new(input: String) -> Lexer {
         let character = input.chars().next();
-        let token = map_character(character.as_ref());
         Lexer {
             input,
             position: 0,
@@ -64,16 +47,31 @@ impl Lexer {
 
     fn next_token(&self) -> (Lexer, Option<Token>) {
         let character = self.input.chars().nth(self.position);
-        let token = map_character(character.as_ref());
+        let token = match character {
+            Some(c) => {
+                let token = match c {
+                    '(' => Token::LeftBracket,
+                    ')' => Token::RightBracket,
+                    '{' => Token::LeftSquirly,
+                    '}' => Token::RightSquirly,
+                    '\"' => Token::Quote,
+                    '\'' => Token::Quote,
+                    ',' => Token::Comma,
+                    ' ' => Token::Space,
+                    '+' => Token::Plus,
+                    '=' => Token::Minus,
+                    _ => Token::StringSymbol {
+                        symbol: String::from("todo"),
+                    },
+                };
 
-        (
-            Lexer {
-                position: self.position + 1,
-                input: self.input.to_string(),
-                character,
-            },
-            token,
-        )
+                Some(token)
+            }
+
+            None => None,
+        };
+
+        (self.advance(), token)
     }
 }
 
