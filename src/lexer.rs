@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::fmt::Display;
 
 // Tokens in the basic hello world application ()
 #[derive(Debug, PartialEq, Clone)]
@@ -49,16 +49,6 @@ struct Lexer {
     character: Option<char>,
 }
 
-fn is_identifier(input: &str) -> bool {
-    match input {
-        "fun" => true,
-        "println" => true,
-        "val" => true,
-        "var" => true,
-        _ => false,
-    }
-}
-
 fn is_identifier_character(character: char) -> bool {
     character.is_alphanumeric() || character == '_'
 }
@@ -76,39 +66,33 @@ fn match_identifier(input: &str) -> Option<Ident> {
 /// iterates through a string looking for a non identifiable character
 /// - usize = the length traversed in the operation
 /// - Option<Ident> = whether an Ident was found
-fn seek(input: &str) -> (usize, Option<Ident>) {
+fn seek(input: &str) -> (usize, Ident) {
     let split_val_vec: Vec<&str> = input.split(|c| !is_identifier_character(c)).collect();
 
     let value = match split_val_vec.first() {
         Some(split) => split,
-        None => return (1, None),
+        None => return (1, Ident::NonIdentifiable(input.to_string())),
     };
+
     let amount_traversed = value.len();
 
     match match_identifier(value) {
-        Some(i) => return (amount_traversed, Some(i)),
-        None => {
-            return (
-                amount_traversed,
-                Some(Ident::NonIdentifiable(value.to_string())),
-            )
-        }
+        Some(i) => return (amount_traversed, i),
+        None => return (amount_traversed, Ident::NonIdentifiable(value.to_string())),
     };
 }
 
 /// Reads a token given
-fn read_identifier(
-    lexer: Lexer,
-    read_while_condition: fn(String) -> bool,
-) -> (Lexer, String, Option<Token>) {
-    if !is_identifier_character(lexer) {}
+fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
+    let string_to_seek = &lexer.input.split_at(lexer.position).1;
+    println!("String to seek = {string_to_seek}");
+    let (amount_traversed, ident) = seek(&lexer.input.split_at(lexer.position).1);
 
-    let string_transform = match lexer.character {
-        Some(v) => String::from(v),
-        None => String::new(),
-    };
+    let new_lexer = lexer.advance(amount_traversed);
 
-    //
+    let token = Token::Identifier(ident);
+
+    (new_lexer, token)
 }
 
 impl Lexer {
@@ -118,7 +102,7 @@ impl Lexer {
         default_value: Token,
         matched_value: Token,
     ) -> Token {
-        let advance_char = self.advance().character;
+        let advance_char = self.advance(1).character;
         if let Some(next_char) = advance_char {
             if next_char == value_to_check_for {
                 return matched_value;
@@ -129,8 +113,8 @@ impl Lexer {
         default_value
     }
 
-    fn advance(&self) -> Lexer {
-        let new_position = self.position + 1;
+    fn advance(&self, amount: usize) -> Lexer {
+        let new_position = self.position + amount;
         let new_char = self.input.chars().nth(new_position);
         Lexer {
             position: new_position,
@@ -149,9 +133,9 @@ impl Lexer {
     }
 
     fn next_token(&self) -> (Lexer, Option<Token>) {
-        let character = self.input.chars().nth(self.position);
-        let token = match character {
+        let token = match self.character {
             Some(c) => {
+                println!("{}", c);
                 let token = match c {
                     '(' => Token::LeftBracket,
                     ')' => Token::RightBracket,
@@ -166,8 +150,8 @@ impl Lexer {
                     '!' => self.peek_for_operator('=', Token::Bang, Token::DoesNotEqual),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
                     _ => {
-                        // some sort of string value
-                        todo!()
+                        let (lexer, token) = read_identifier(self);
+                        return (lexer, Some(token));
                     }
                 };
 
@@ -176,8 +160,7 @@ impl Lexer {
 
             None => None,
         };
-
-        (self.advance(), token)
+        (self.advance(1), token)
     }
 }
 
@@ -196,6 +179,8 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ()> {
 
 #[cfg(test)]
 mod tests {
+    use std::vec;
+
     use crate::lexer::{self, Lexer};
 
     use super::{tokenize, Token};
@@ -374,5 +359,77 @@ mod tests {
         let actual = lexer.next_token().1.unwrap();
 
         assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn fun_main_input_success() {
+        let lexer = Lexer::new("fun main".to_string());
+
+        //[fun] main
+        let (new_lexer, token) = lexer.next_token();
+        assert_eq!(Token::Identifier(lexer::Ident::Fun), token.unwrap());
+
+        //fun[]main
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(Token::Space, token.unwrap());
+
+        //fun [main]
+        let (new_lexer, token) = new_lexer.next_token();
+
+        assert_eq!(
+            Token::Identifier(lexer::Ident::NonIdentifiable("main".to_string())),
+            token.unwrap()
+        );
+    }
+
+    #[test]
+    fn fun_main_lp_rp_input_success() {
+        let lexer = Lexer::new("fun main()".to_string());
+        let (new_lexer, token) = lexer.next_token();
+        assert_eq!(Token::Identifier(lexer::Ident::Fun), token.unwrap());
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(Token::Space, token.unwrap());
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(
+            Token::Identifier(lexer::Ident::NonIdentifiable("main".to_string())),
+            token.unwrap()
+        );
+
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(Token::LeftBracket, token.unwrap());
+
+        let (_, token) = new_lexer.next_token();
+        assert_eq!(Token::RightBracket, token.unwrap());
+    }
+
+    #[test]
+    fn fun_main_lp_rp_block_input_success() {
+        let lexer = Lexer::new("fun main(){}".to_string());
+        let (new_lexer, token) = lexer.next_token();
+        assert_eq!(Token::Identifier(lexer::Ident::Fun), token.unwrap());
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(Token::Space, token.unwrap());
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(
+            Token::Identifier(lexer::Ident::NonIdentifiable("main".to_string())),
+            token.unwrap()
+        );
+        let (new_lexer, token) = new_lexer.next_token();
+        assert_eq!(Token::LeftBracket, token.unwrap());
+
+        let (_, token) = new_lexer.next_token();
+        assert_eq!(Token::RightBracket, token.unwrap());
+
+        let (new_lexer, token) = new_lexer.next_token();
+        println!("{:?}", token.clone().unwrap());
+        assert_eq!(Token::LeftSquirly, token.unwrap());
+
+        let (_, token) = new_lexer.next_token();
+        assert_eq!(Token::RightSquirly, token.unwrap());
+    }
+
+    #[test]
+    fn is_alphanumeric() {
+        assert!('}'.is_alphanumeric())
     }
 }
