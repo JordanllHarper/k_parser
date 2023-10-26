@@ -1,5 +1,7 @@
 use std::fmt::Display;
 
+use crate::lexer;
+
 // Tokens in the basic hello world application ()
 #[derive(Debug, PartialEq, Clone)]
 enum Ident {
@@ -84,8 +86,6 @@ fn seek(input: &str) -> (usize, Ident) {
 
 /// Reads a token given
 fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
-    let string_to_seek = &lexer.input.split_at(lexer.position).1;
-    println!("String to seek = {string_to_seek}");
     let (amount_traversed, ident) = seek(&lexer.input.split_at(lexer.position).1);
 
     let new_lexer = lexer.advance(amount_traversed);
@@ -115,6 +115,7 @@ impl Lexer {
 
     fn advance(&self, amount: usize) -> Lexer {
         let new_position = self.position + amount;
+
         let new_char = self.input.chars().nth(new_position);
         Lexer {
             position: new_position,
@@ -135,7 +136,6 @@ impl Lexer {
     fn next_token(&self) -> (Lexer, Option<Token>) {
         let token = match self.character {
             Some(c) => {
-                println!("{}", c);
                 let token = match c {
                     '(' => Token::LeftBracket,
                     ')' => Token::RightBracket,
@@ -417,7 +417,7 @@ mod tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LeftBracket, token.unwrap());
 
-        let (_, token) = new_lexer.next_token();
+        let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::RightBracket, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
@@ -426,10 +426,5 @@ mod tests {
 
         let (_, token) = new_lexer.next_token();
         assert_eq!(Token::RightSquirly, token.unwrap());
-    }
-
-    #[test]
-    fn is_alphanumeric() {
-        assert!('}'.is_alphanumeric())
     }
 }
