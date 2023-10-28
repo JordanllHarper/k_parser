@@ -14,6 +14,7 @@ fn is_identifier_character(character: char) -> bool {
 fn match_identifier(input: &str) -> Option<Ident> {
     match input {
         "fun" => Some(Ident::Fun),
+        "main" => Some(Ident::Main),
         "println" => Some(Ident::Println),
         "val" => Some(Ident::Val),
         "var" => Some(Ident::Var),

@@ -1,6 +1,7 @@
 #[derive(Debug, PartialEq, Clone)]
 pub enum Ident {
     Fun,
+    Main,
     Println,
     Val,
     Var,
@@ -10,7 +11,6 @@ pub enum Ident {
 #[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     // Anything that isn't a designated token
-    StringSymbol { symbol: String }, //e.g.  "[Hello],[World]"
     // ()
     LeftBracket,
     RightBracket,

@@ -36,6 +36,15 @@ mod lexer_symbol_tests {
     }
 
     #[test]
+    fn main_input_success() {
+        let lexer = Lexer::new(String::from("main"));
+        let expected = Token::Identifier(Ident::Main);
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
     fn rb_input_success() {
         let lexer = Lexer::new(String::from(")"));
         let expected = Token::RightBracket;
@@ -204,12 +213,9 @@ mod lexer_symbol_tests {
         assert_eq!(Token::Space, token.unwrap());
 
         //fun [main]
-        let (new_lexer, token) = new_lexer.next_token();
+        let (_new_lexer, token) = new_lexer.next_token();
 
-        assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
-            token.unwrap()
-        );
+        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
     }
 
     #[test]
@@ -220,10 +226,7 @@ mod lexer_symbol_tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Space, token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
-            token.unwrap()
-        );
+        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LeftBracket, token.unwrap());
@@ -240,10 +243,7 @@ mod lexer_symbol_tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Space, token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
-            token.unwrap()
-        );
+        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LeftBracket, token.unwrap());
 
@@ -269,10 +269,7 @@ mod lexer_symbol_tests {
         assert_eq!(Token::Space, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
-            token.unwrap()
-        );
+        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LeftBracket, token.unwrap());
 
@@ -318,7 +315,7 @@ mod lexer_symbol_tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::RightBracket, token.unwrap());
 
-        let (new_lexer, token) = new_lexer.next_token();
+        let (_, token) = new_lexer.next_token();
         assert_eq!(Token::RightSquirly, token.unwrap());
     }
 }
@@ -337,7 +334,7 @@ mod iterator_method_tests {
         let expected = vec![
             Token::Identifier(Ident::Fun),
             Token::Space,
-            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
+            Token::Identifier(Ident::Main),
             Token::LeftBracket,
             Token::RightBracket,
         ];
@@ -354,7 +351,7 @@ mod iterator_method_tests {
         let expected = vec![
             Token::Identifier(Ident::Fun),
             Token::Space,
-            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
+            Token::Identifier(Ident::Main),
             Token::LeftBracket,
             Token::RightBracket,
             Token::LeftSquirly,

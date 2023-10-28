@@ -1,4 +1,4 @@
-use std::{fs::File, io::Read, path::Path};
+use std::{fs::File, io::Read};
 
 use clap::Parser;
 use lexer::lexer::Lexer;
