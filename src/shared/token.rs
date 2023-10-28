@@ -40,4 +40,6 @@ pub enum Token {
     DoesNotEqual,
     // val, var, fun, println, etc...
     Identifier(Ident),
+    // \n
+    Newline,
 }

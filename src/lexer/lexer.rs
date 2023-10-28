@@ -89,10 +89,6 @@ impl Lexer {
         }
     }
 
-    fn from_lexer(lexer: &Lexer) -> Lexer {
-        lexer.clone()
-    }
-
     pub fn next_token(&self) -> (Lexer, Option<Token>) {
         let token = match self.character {
             Some(c) => {
@@ -103,6 +99,7 @@ impl Lexer {
                     '}' => Token::RightSquirly,
                     '\"' => Token::Quote,
                     '\'' => Token::Quote,
+                    '\n' => Token::Newline,
                     ',' => Token::Comma,
                     ' ' => Token::Space,
                     '+' => Token::Plus,
@@ -142,3 +139,12 @@ impl Lexer {
         vec_of_tokens
     }
 }
+
+// Shopkeeper - Customer
+// Something <- Bread
+// Nothing   <- Obscure mango
+//
+//
+//
+//
+//
