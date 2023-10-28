@@ -154,7 +154,16 @@ mod lexer_symbol_tests {
     #[test]
     fn question_success() {
         let lexer = Lexer::new(String::from("?"));
-        let expected = Token::Bang;
+        let expected = Token::Question;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn safecall_success() {
+        let lexer = Lexer::new(String::from("?."));
+        let expected = Token::Safecall;
 
         let actual = lexer.next_token().1.unwrap();
 

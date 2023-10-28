@@ -41,7 +41,6 @@ fn seek(input: &str) -> (usize, Ident) {
     };
 }
 
-/// Reads a token given
 fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
     let (amount_traversed, ident) = seek(&lexer.input.split_at(lexer.position).1);
 
@@ -107,6 +106,7 @@ impl Lexer {
                     '.' => Token::Period,
                     '-' => Token::Minus,
                     '!' => self.peek_for_operator('=', Token::Bang, Token::DoesNotEqual),
+                    '?' => self.peek_for_operator('.', Token::Question, Token::Safecall),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
                     _ => {
                         let (lexer, token) = read_identifier(self);
