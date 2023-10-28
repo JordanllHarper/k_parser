@@ -36,6 +36,10 @@ pub enum Token {
     Equals,
     // !
     Bang,
+    // ?
+    Question,
+    //?.whatever
+    Safecall,
     // !=
     DoesNotEqual,
     // val, var, fun, println, etc...

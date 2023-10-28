@@ -6,7 +6,7 @@ mod lexer_symbol_tests {
     };
 
     #[test]
-    fn period_input_success() {
+    fn period_success() {
         let lexer = Lexer::new(String::from("."));
         let expected = Token::Period;
 
@@ -16,7 +16,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn space_input_success() {
+    fn space_success() {
         let lexer = Lexer::new(String::from(" "));
         let expected = Token::Space;
 
@@ -26,7 +26,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn lb_input_success() {
+    fn lb_success() {
         let lexer = Lexer::new(String::from("("));
         let expected = Token::LeftBracket;
 
@@ -36,7 +36,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn main_input_success() {
+    fn main_success() {
         let lexer = Lexer::new(String::from("main"));
         let expected = Token::Identifier(Ident::Main);
 
@@ -45,7 +45,7 @@ mod lexer_symbol_tests {
         assert_eq!(expected, actual);
     }
     #[test]
-    fn rb_input_success() {
+    fn rb_success() {
         let lexer = Lexer::new(String::from(")"));
         let expected = Token::RightBracket;
 
@@ -54,7 +54,7 @@ mod lexer_symbol_tests {
         assert_eq!(expected, actual);
     }
     #[test]
-    fn ls_input_success() {
+    fn ls_success() {
         let lexer = Lexer::new(String::from("{"));
         let expected = Token::LeftSquirly;
 
@@ -63,7 +63,7 @@ mod lexer_symbol_tests {
         assert_eq!(expected, actual);
     }
     #[test]
-    fn rs_input_success() {
+    fn rs_success() {
         let lexer = Lexer::new(String::from("}"));
         let expected = Token::RightSquirly;
 
@@ -73,7 +73,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn comma_input_success() {
+    fn comma_success() {
         let lexer = Lexer::new(String::from(","));
         let expected = Token::Comma;
 
@@ -83,7 +83,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn quote_input_success() {
+    fn quote_success() {
         let lexer = Lexer::new(String::from("\'"));
         let expected = Token::Quote;
 
@@ -93,7 +93,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn double_quote_input_success() {
+    fn double_quote_success() {
         let lexer = Lexer::new(String::from("\""));
         let expected = Token::Quote;
 
@@ -103,7 +103,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn plus_input_success() {
+    fn plus_success() {
         let lexer = Lexer::new(String::from("+"));
         let expected = Token::Plus;
 
@@ -113,7 +113,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn minus_input_success() {
+    fn minus_success() {
         let lexer = Lexer::new(String::from("-"));
         let expected = Token::Minus;
 
@@ -123,7 +123,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn assign_input_success() {
+    fn assign_success() {
         let lexer = Lexer::new(String::from("="));
         let expected = Token::Assign;
 
@@ -132,7 +132,7 @@ mod lexer_symbol_tests {
         assert_eq!(expected, actual);
     }
     #[test]
-    fn equality_input_success() {
+    fn equality_success() {
         let lexer = Lexer::new(String::from("=="));
         let expected = Token::Equals;
 
@@ -142,7 +142,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn bang_input_success() {
+    fn bang_success() {
         let lexer = Lexer::new(String::from("!"));
         let expected = Token::Bang;
 
@@ -150,8 +150,18 @@ mod lexer_symbol_tests {
 
         assert_eq!(expected, actual);
     }
+
     #[test]
-    fn does_not_equal_input_success() {
+    fn question_success() {
+        let lexer = Lexer::new(String::from("?"));
+        let expected = Token::Bang;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn does_not_equal_success() {
         let lexer = Lexer::new(String::from("!="));
         let expected = Token::DoesNotEqual;
 
@@ -161,7 +171,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn println_input_success() {
+    fn println_success() {
         let lexer = Lexer::new(String::from("println"));
         let expected = Token::Identifier(Ident::Println);
 
@@ -171,7 +181,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn fn_input_success() {
+    fn fn_success() {
         let lexer = Lexer::new(String::from("fun"));
         let expected = Token::Identifier(Ident::Fun);
 
@@ -181,7 +191,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn val_input_success() {
+    fn val_success() {
         let lexer = Lexer::new(String::from("val"));
         let expected = Token::Identifier(Ident::Val);
 
@@ -191,7 +201,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn var_input_success() {
+    fn var_success() {
         let lexer = Lexer::new(String::from("var"));
         let expected = Token::Identifier(Ident::Var);
 
@@ -201,7 +211,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn fun_main_input_success() {
+    fn fun_main_success() {
         let lexer = Lexer::new("fun main".to_string());
 
         //[fun] main
@@ -213,13 +223,13 @@ mod lexer_symbol_tests {
         assert_eq!(Token::Space, token.unwrap());
 
         //fun [main]
-        let (_new_lexer, token) = new_lexer.next_token();
+        let (new_lexer, token) = new_lexer.next_token();
 
         assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
     }
 
     #[test]
-    fn fun_main_lp_rp_input_success() {
+    fn fun_main_lp_rp_success() {
         let lexer = Lexer::new("fun main()".to_string());
         let (new_lexer, token) = lexer.next_token();
         assert_eq!(Token::Identifier(Ident::Fun), token.unwrap());
@@ -236,7 +246,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn fun_main_lp_rp_block_input_success() {
+    fn fun_main_lp_rp_block_success() {
         let lexer = Lexer::new("fun main(){}".to_string());
         let (new_lexer, token) = lexer.next_token();
         assert_eq!(Token::Identifier(Ident::Fun), token.unwrap());
@@ -259,7 +269,7 @@ mod lexer_symbol_tests {
     }
 
     #[test]
-    fn fun_main_hello_world_block_input_success() {
+    fn fun_main_hello_world_block_success() {
         let lexer = Lexer::new("fun main(){println(\"Hello, World!\")}".to_string());
 
         let (new_lexer, token) = lexer.next_token();
@@ -315,7 +325,7 @@ mod lexer_symbol_tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::RightBracket, token.unwrap());
 
-        let (_, token) = new_lexer.next_token();
+        let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::RightSquirly, token.unwrap());
     }
 }
