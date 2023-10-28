@@ -89,6 +89,10 @@ impl Lexer {
         }
     }
 
+    fn from_lexer(lexer: &Lexer) -> Lexer {
+        lexer.clone()
+    }
+
     pub fn next_token(&self) -> (Lexer, Option<Token>) {
         let token = match self.character {
             Some(c) => {
@@ -118,5 +122,23 @@ impl Lexer {
             None => None,
         };
         (self.advance(1), token)
+    }
+    pub fn collect(self) -> Vec<Token> {
+        let mut vec_of_tokens = Vec::new();
+
+        let mut lexer_state = self;
+
+        loop {
+            let (lexer, opt_token) = lexer_state.next_token();
+
+            match opt_token {
+                Some(token) => vec_of_tokens.push(token),
+                None => break,
+            }
+
+            lexer_state = lexer;
+        }
+
+        vec_of_tokens
     }
 }

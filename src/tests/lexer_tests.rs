@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod tests {
+mod lexer_symbol_tests {
     use crate::{
         lexer::lexer::Lexer,
         shared::token::{Ident, Token},
@@ -320,5 +320,59 @@ mod tests {
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::RightSquirly, token.unwrap());
+    }
+}
+
+#[cfg(test)]
+mod iterator_method_tests {
+    use crate::{
+        lexer::lexer::Lexer,
+        shared::token::{Ident, Token},
+    };
+
+    #[test]
+    fn collect_success() {
+        let data = "fun main()";
+
+        let expected = vec![
+            Token::Identifier(Ident::Fun),
+            Token::Space,
+            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
+            Token::LeftBracket,
+            Token::RightBracket,
+        ];
+
+        let actual = Lexer::new(data.to_string()).collect();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn collect_hello_world_success() {
+        let lexer = Lexer::new("fun main(){println(\"Hello, World!\")}".to_string());
+
+        let expected = vec![
+            Token::Identifier(Ident::Fun),
+            Token::Space,
+            Token::Identifier(Ident::NonIdentifiable("main".to_string())),
+            Token::LeftBracket,
+            Token::RightBracket,
+            Token::LeftSquirly,
+            Token::Identifier(Ident::Println),
+            Token::LeftBracket,
+            Token::Quote,
+            Token::Identifier(Ident::NonIdentifiable("Hello".to_string())),
+            Token::Comma,
+            Token::Space,
+            Token::Identifier(Ident::NonIdentifiable("World".to_string())),
+            Token::Bang,
+            Token::Quote,
+            Token::RightBracket,
+            Token::RightSquirly,
+        ];
+
+        let actual = lexer.collect();
+
+        assert_eq!(expected, actual);
     }
 }
