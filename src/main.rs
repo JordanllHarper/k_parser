@@ -1,4 +1,6 @@
 mod lexer;
+mod shared;
+mod tests;
 use std::collections::HashMap;
 
 fn main() {
