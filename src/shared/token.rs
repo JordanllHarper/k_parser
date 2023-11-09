@@ -2,18 +2,21 @@
 ///
 /// The lexer will convert raw code into these for use with the parser in building trees.
 ///
-/// For additions - format is as follows
+/// For additions, the following format is used. This keeps things as ambiguous as possible.
 ///
-/// //[symbol]
-/// [SymbolName]
+/// // [Symbol]
+/// [Symbol Name]
 ///
-/// E.g.
+/// Example
 /// ```rust
 ///    
-///    // (
-///    LeftBracket
+///    pub enum Token {
 ///
+///    // ( <- Symbol
+///    LeftBracket // <- Symbol Name
+///    }
 /// ```
+///
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Ident {
@@ -33,16 +36,16 @@ pub enum Ident {
 pub enum Token {
     // Anything that isn't a designated token
     // (
-    LeftBracket,
+    LPAREN,
 
     // )
-    RightBracket,
+    RPAREN,
 
     // {
-    LeftSquirly,
+    LCURLYBRACE,
 
     // }
-    RightSquirly,
+    RCURLYBRACE,
 
     // " or '
     Quote,

@@ -28,7 +28,7 @@ mod lexer_symbol_tests {
     #[test]
     fn lb_success() {
         let lexer = Lexer::new(String::from("("));
-        let expected = Token::LeftBracket;
+        let expected = Token::LPAREN;
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -47,7 +47,7 @@ mod lexer_symbol_tests {
     #[test]
     fn rb_success() {
         let lexer = Lexer::new(String::from(")"));
-        let expected = Token::RightBracket;
+        let expected = Token::RPAREN;
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -56,7 +56,7 @@ mod lexer_symbol_tests {
     #[test]
     fn ls_success() {
         let lexer = Lexer::new(String::from("{"));
-        let expected = Token::LeftSquirly;
+        let expected = Token::LCURLYBRACE;
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -65,7 +65,7 @@ mod lexer_symbol_tests {
     #[test]
     fn rs_success() {
         let lexer = Lexer::new(String::from("}"));
-        let expected = Token::RightSquirly;
+        let expected = Token::RCURLYBRACE;
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -252,7 +252,7 @@ mod lexer_symbol_tests {
         assert_eq!(Token::Space, token.unwrap());
 
         //fun [main]
-        let (new_lexer, token) = new_lexer.next_token();
+        let (_new_lexer, token) = new_lexer.next_token();
 
         assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
     }
@@ -268,10 +268,10 @@ mod lexer_symbol_tests {
         assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::LeftBracket, token.unwrap());
+        assert_eq!(Token::LPAREN, token.unwrap());
 
         let (_, token) = new_lexer.next_token();
-        assert_eq!(Token::RightBracket, token.unwrap());
+        assert_eq!(Token::RPAREN, token.unwrap());
     }
 
     #[test]
@@ -284,17 +284,17 @@ mod lexer_symbol_tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::LeftBracket, token.unwrap());
+        assert_eq!(Token::LPAREN, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::RightBracket, token.unwrap());
+        assert_eq!(Token::RPAREN, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         println!("{:?}", token.clone().unwrap());
-        assert_eq!(Token::LeftSquirly, token.unwrap());
+        assert_eq!(Token::LCURLYBRACE, token.unwrap());
 
         let (_, token) = new_lexer.next_token();
-        assert_eq!(Token::RightSquirly, token.unwrap());
+        assert_eq!(Token::RCURLYBRACE, token.unwrap());
     }
 
     #[test]
@@ -310,13 +310,13 @@ mod lexer_symbol_tests {
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::LeftBracket, token.unwrap());
+        assert_eq!(Token::LPAREN, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::RightBracket, token.unwrap());
+        assert_eq!(Token::RPAREN, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::LeftSquirly, token.unwrap());
+        assert_eq!(Token::LCURLYBRACE, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(
@@ -325,7 +325,7 @@ mod lexer_symbol_tests {
         );
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::LeftBracket, token.unwrap());
+        assert_eq!(Token::LPAREN, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Quote, token.unwrap());
@@ -355,10 +355,10 @@ mod lexer_symbol_tests {
         assert_eq!(Token::Quote, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::RightBracket, token.unwrap());
+        assert_eq!(Token::RPAREN, token.unwrap());
 
-        let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::RightSquirly, token.unwrap());
+        let (_new_lexer, token) = new_lexer.next_token();
+        assert_eq!(Token::RCURLYBRACE, token.unwrap());
     }
 }
 
@@ -377,8 +377,8 @@ mod iterator_method_tests {
             Token::Identifier(Ident::Fun),
             Token::Space,
             Token::Identifier(Ident::Main),
-            Token::LeftBracket,
-            Token::RightBracket,
+            Token::LPAREN,
+            Token::RPAREN,
         ];
 
         let actual = Lexer::new(data.to_string()).collect();
@@ -394,11 +394,11 @@ mod iterator_method_tests {
             Token::Identifier(Ident::Fun),
             Token::Space,
             Token::Identifier(Ident::Main),
-            Token::LeftBracket,
-            Token::RightBracket,
-            Token::LeftSquirly,
+            Token::LPAREN,
+            Token::RPAREN,
+            Token::LCURLYBRACE,
             Token::Identifier(Ident::NonIdentifiable(String::from("println"))),
-            Token::LeftBracket,
+            Token::LPAREN,
             Token::Quote,
             Token::Identifier(Ident::NonIdentifiable("Hello".to_string())),
             Token::Comma,
@@ -406,8 +406,8 @@ mod iterator_method_tests {
             Token::Identifier(Ident::NonIdentifiable("World".to_string())),
             Token::Bang,
             Token::Quote,
-            Token::RightBracket,
-            Token::RightSquirly,
+            Token::RPAREN,
+            Token::RCURLYBRACE,
         ];
 
         let actual = lexer.collect();

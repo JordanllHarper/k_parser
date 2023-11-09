@@ -92,10 +92,10 @@ impl Lexer {
         let token = match self.character {
             Some(c) => {
                 let token = match c {
-                    '(' => Token::LeftBracket,
-                    ')' => Token::RightBracket,
-                    '{' => Token::LeftSquirly,
-                    '}' => Token::RightSquirly,
+                    '(' => Token::LPAREN,
+                    ')' => Token::RPAREN,
+                    '{' => Token::LCURLYBRACE,
+                    '}' => Token::RCURLYBRACE,
                     '\"' => Token::Quote,
                     '\'' => Token::Quote,
                     '\n' => Token::Newline,
