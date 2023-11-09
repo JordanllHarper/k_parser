@@ -36,16 +36,16 @@ pub enum Ident {
 pub enum Token {
     // Anything that isn't a designated token
     // (
-    LPAREN,
+    LParen,
 
     // )
-    RPAREN,
+    RParen,
 
     // {
-    LCURLYBRACE,
+    LCurlyBrace,
 
     // }
-    RCURLYBRACE,
+    RCurlyBrace,
 
     // " or '
     Quote,
