@@ -1,16 +1,29 @@
 use crate::shared::token::{Ident, Token};
 
 #[derive(Debug, Clone)]
+/// The Lexer for converting a given input of type String to a stream of Tokens.
+///
+/// Uses the iterator pattern to provide immutability when moving from one token to the next.
+///
+/// Also comes with a collect method for String -> Vec<Token> convenience!
+///
+/// Mainly informed by TJ Devries's parser.
 pub struct Lexer {
     position: usize,
     input: String,
     character: Option<char>,
 }
 
+/// Returns true if it is an identifier character.
+/// E.g. a-zA-Z or _ -> characters that aren't non identifiable and specific to operations such as
+/// + or -.
 fn is_identifier_character(character: char) -> bool {
     character.is_alphanumeric() || character == '_'
 }
 
+/// Matches an input of some identifier with it's token.
+/// Some if it matches the list of identifiers.
+/// None if it doesn't match.
 fn match_identifier(input: &str) -> Option<Ident> {
     match input {
         "fun" => Some(Ident::Fun),
@@ -51,6 +64,8 @@ fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
     (new_lexer, token)
 }
 
+/// Lexer for creating tokens.
+/// Immutable by design and inspired by TJ Devries's parser.
 impl Lexer {
     /// Peeks for a second operator to tokenize double character operators --> e.g. "==" or "!="
     fn peek_for_operator(
