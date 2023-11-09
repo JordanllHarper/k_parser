@@ -202,7 +202,7 @@ mod lexer_symbol_tests {
     #[test]
     fn println_success() {
         let lexer = Lexer::new(String::from("println"));
-        let expected = Token::Identifier(Ident::Println);
+        let expected = Token::Identifier(Ident::NonIdentifiable(String::from("println")));
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -319,7 +319,10 @@ mod lexer_symbol_tests {
         assert_eq!(Token::LeftSquirly, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Println), token.unwrap());
+        assert_eq!(
+            Token::Identifier(Ident::NonIdentifiable(String::from("println"))),
+            token.unwrap()
+        );
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LeftBracket, token.unwrap());
@@ -394,7 +397,7 @@ mod iterator_method_tests {
             Token::LeftBracket,
             Token::RightBracket,
             Token::LeftSquirly,
-            Token::Identifier(Ident::Println),
+            Token::Identifier(Ident::NonIdentifiable(String::from("println"))),
             Token::LeftBracket,
             Token::Quote,
             Token::Identifier(Ident::NonIdentifiable("Hello".to_string())),
