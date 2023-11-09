@@ -40,6 +40,7 @@ fn seek(input: &str) -> (usize, Ident) {
     };
 }
 
+/// Reads an identifier such as a keyword 'fun' and tokenises
 fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
     let (amount_traversed, ident) = seek(&lexer.input.split_at(lexer.position).1);
 
@@ -51,6 +52,7 @@ fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
 }
 
 impl Lexer {
+    /// Peeks for a second operator to tokenize double character operators --> e.g. "==" or "!="
     fn peek_for_operator(
         &self,
         value_to_check_for: char,
@@ -68,6 +70,7 @@ impl Lexer {
         default_value
     }
 
+    /// Advances the lexer a given amount. Returns a new lexer on the next character.
     fn advance(&self, amount: usize) -> Lexer {
         let new_position = self.position + amount;
 
@@ -79,6 +82,7 @@ impl Lexer {
         }
     }
 
+    /// Creates a new lexer to traverse the given input.
     pub fn new(input: String) -> Lexer {
         let first_char = input.chars().nth(0);
         Lexer {
@@ -88,6 +92,7 @@ impl Lexer {
         }
     }
 
+    /// Gets the next token. See token.rs.
     pub fn next_token(&self) -> (Lexer, Option<Token>) {
         let token = match self.character {
             Some(c) => {
@@ -122,6 +127,9 @@ impl Lexer {
         };
         (self.advance(1), token)
     }
+    /// Convenience method for advancing lexer through the input and creating a vector of tokens.
+    ///
+    /// You probably want to use this the majority of the time.
     pub fn collect(self) -> Vec<Token> {
         let mut vec_of_tokens = Vec::new();
 
@@ -141,7 +149,3 @@ impl Lexer {
         vec_of_tokens
     }
 }
-
-// Shopkeeper - Customer
-// Something <- Bread
-// Nothing   <- Obscure mango
