@@ -97,4 +97,10 @@ pub enum Token {
 
     // :
     Colon,
+
+    // <
+    LeftAngleBracket,
+
+    // >
+    RightAngleBracket,
 }
