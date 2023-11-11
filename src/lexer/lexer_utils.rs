@@ -16,7 +16,9 @@ pub fn match_identifier(input: &str) -> Option<Ident> {
         "main" => Some(Ident::Main),
         "val" => Some(Ident::Val),
         "var" => Some(Ident::Var),
-        "when" => Some(Ident::Var),
+        "when" => Some(Ident::When),
+        "if" => Some(Ident::If),
+        "else" => Some(Ident::Else),
         _ => None,
     }
 }
