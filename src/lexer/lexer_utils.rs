@@ -40,14 +40,3 @@ pub fn seek(input: &str) -> (usize, Ident) {
         None => return (amount_traversed, Ident::NonIdentifiable(value.to_string())),
     };
 }
-
-/// Reads an identifier such as a keyword 'fun' and tokenises
-pub fn read_identifier(lexer: &Lexer) -> (Lexer, Token) {
-    let (amount_traversed, ident) = seek(&lexer.input.split_at(lexer.position).1);
-
-    let new_lexer = lexer.advance(amount_traversed);
-
-    let token = Token::Identifier(ident);
-
-    (new_lexer, token)
-}

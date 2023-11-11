@@ -1,6 +1,6 @@
 use crate::shared::token::Token;
 
-use super::lexer_utils::read_identifier;
+use super::lexer_utils::seek;
 /// The Lexer for converting a given input of type String to a stream of Tokens.
 ///
 /// Uses the iterator pattern to provide immutability when moving from one token to the next.
@@ -48,6 +48,17 @@ impl Lexer {
         }
     }
 
+    /// Reads an identifier such as a keyword 'fun' and tokenises
+    fn read_identifier(&self) -> (Lexer, Token) {
+        let (amount_traversed, ident) = seek(self.input.split_at(self.position).1);
+
+        let new_lexer = self.advance(amount_traversed);
+
+        let token = Token::Identifier(ident);
+
+        (new_lexer, token)
+    }
+
     /// Creates a new lexer to traverse the given input.
     pub fn new(input: String) -> Lexer {
         let first_char = input.chars().nth(0);
@@ -81,7 +92,7 @@ impl Lexer {
                     '?' => self.peek_for_operator('.', Token::Question, Token::Safecall),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
                     _ => {
-                        let (lexer, token) = read_identifier(self);
+                        let (lexer, token) = self.read_identifier();
                         return (lexer, Some(token));
                     }
                 };
