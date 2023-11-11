@@ -22,12 +22,19 @@
 pub enum Ident {
     // fun
     Fun,
+
     // main
     Main,
+
     // val
     Val,
+
     // var
     Var,
+
+    // when
+    When,
+
     // anything that doesn't match above
     NonIdentifiable(String),
 }
