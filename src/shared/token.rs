@@ -86,6 +86,12 @@ pub enum Token {
     // ==
     Assign,
 
+    // |
+    Pipe,
+
+    // &
+    Ampersand,
+
     // ||
     Or,
 
