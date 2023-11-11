@@ -18,7 +18,7 @@ pub struct Lexer {
 /// Lexer for creating tokens.
 /// Immutable by design and inspired by TJ Devries's parser.
 impl Lexer {
-    /// Peeks for a second operator to tokenize double character operators --> e.g. "==" or "!="
+    /// Peeks for a second operator to tokenize double character operators -> e.g. "==" or "!="
     fn peek_for_operator(
         &self,
         value_to_check_for: char,
