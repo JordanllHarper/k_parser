@@ -14,6 +14,25 @@ mod lexer_symbol_tests {
 
         assert_eq!(expected, actual);
     }
+
+    #[test]
+    fn l_angle_brack_success() {
+        let lexer = Lexer::new(String::from("<"));
+        let expected = Token::LAngleBracket;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn r_angle_brack_success() {
+        let lexer = Lexer::new(String::from(">"));
+        let expected = Token::RAngleBracket;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
     #[test]
     fn period_success() {
         let lexer = Lexer::new(String::from("."));
