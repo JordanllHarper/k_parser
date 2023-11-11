@@ -4,7 +4,7 @@ use crate::shared::token::{Ident, Token};
 
 use super::ast_node::AstNode;
 
-trait Parser {
+pub trait Parser {
     /// Gets an updated tree root with the result of this Node.
     ///
     /// Will return the same tree if no more tokens are remaining.
@@ -15,7 +15,7 @@ trait Parser {
 ///
 /// Contains the tokens of the building operation, the current position of the parser
 /// and the current token being operated on.
-struct AstParser {
+pub struct AstParser {
     tokens: Vec<Token>,
     current_token_position: usize,
     current_token: Option<Token>,
@@ -23,7 +23,7 @@ struct AstParser {
 }
 
 impl AstParser {
-    fn new(tokens: Vec<Token>) -> Self {
+    pub fn new(tokens: Vec<Token>) -> Self {
         let start_token = tokens.get(0);
 
         let start_node = match start_token {
@@ -42,28 +42,21 @@ impl AstParser {
         }
     }
 
-    fn advance(&self, tree_root: AstNode) -> Self {
+    fn advance(&self) -> Self {
         let new_position = self.current_token_position + 1;
         let new_token = self.tokens.get(new_position);
         Self {
             tokens: self.tokens.clone(),
             current_token_position: new_position,
             current_token: new_token.cloned(),
-            current_tree_root: tree_root,
+            current_tree_root: self.current_tree_root.clone(),
         }
     }
 }
 
 impl Parser for AstParser {
-    // bare minimum functionality
-    // One node -> e.g. ,
-    //
-    // Process:
-    // Read through tokens
-    // If current token is None, return the root with no operations
-    //
-
     fn update_tree(&self) -> (AstNode, Self) {
-        todo!()
+        let new_parser = self.advance();
+        (new_parser.current_tree_root.clone(), new_parser)
     }
 }
