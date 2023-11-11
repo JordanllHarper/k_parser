@@ -88,6 +88,7 @@ impl Lexer {
                     '-' => Token::Minus,
                     '/' => Token::Divide,
                     '.' => Token::Period,
+                    ':' => Token::Colon,
                     '!' => self.peek_for_operator('=', Token::Bang, Token::DoesNotEqual),
                     '?' => self.peek_for_operator('.', Token::Question, Token::Safecall),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
