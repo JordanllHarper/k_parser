@@ -28,3 +28,13 @@ impl AstParser {
         }
     }
 }
+
+impl Parser for AstParser {
+    fn advance(&self) -> Self {
+        todo!()
+    }
+
+    fn next_node(&self) -> (AstNode, Self) {
+        todo!()
+    }
+}
