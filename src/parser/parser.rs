@@ -27,9 +27,8 @@ impl AstParser {
         let start_token = tokens.get(0);
 
         let start_node = match start_token {
-            Some(token) => AstNode::new(Box::new(None), Arc::new(None), token.clone()),
+            Some(token) => AstNode::new(Arc::new(None), token.clone()),
             None => AstNode::new(
-                Box::new(None),
                 Arc::new(None),
                 Token::Identifier(Ident::NonIdentifiable(String::from(""))),
             ),

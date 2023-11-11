@@ -9,20 +9,14 @@ use crate::shared::token::Token;
 /// The parent and children will be None if there is none.
 #[derive(Clone, Debug)]
 pub struct AstNode {
-    pub parent: Box<Option<AstNode>>,
     pub children: Arc<Option<Vec<AstNode>>>,
     pub node_token: Token,
 }
 
 impl AstNode {
     /// Create a new node of the AST.
-    pub fn new(
-        parent: Box<Option<AstNode>>,
-        children: Arc<Option<Vec<AstNode>>>,
-        node_token: Token,
-    ) -> Self {
+    pub fn new(children: Arc<Option<Vec<AstNode>>>, node_token: Token) -> Self {
         Self {
-            parent,
             children,
             node_token,
         }
