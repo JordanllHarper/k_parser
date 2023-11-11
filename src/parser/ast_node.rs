@@ -14,6 +14,7 @@ pub struct AstNode {
 }
 
 impl AstNode {
+    /// Create a new node of the AST
     pub fn new(
         parent: Box<Option<AstNode>>,
         children: Arc<Option<Vec<AstNode>>>,
