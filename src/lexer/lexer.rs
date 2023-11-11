@@ -19,6 +19,10 @@ pub struct Lexer {
 /// Immutable by design and inspired by TJ Devries's parser.
 impl Lexer {
     /// Peeks for a second operator to tokenize double character operators -> e.g. "==" or "!="
+    ///
+    /// value_to_check_for - Returns matched value if it finds this
+    /// default_value - the default value if the check for value isn't found
+    /// matched_value - the returned value if the value to check for isn't found
     fn peek_for_operator(
         &self,
         value_to_check_for: char,
@@ -36,7 +40,11 @@ impl Lexer {
         default_value
     }
 
-    /// Advances the lexer a given amount. Returns a new lexer on the next character.
+    /// Advances the lexer a given amount.
+    ///
+    /// amount - The amount to advance the lexer
+    ///
+    /// Returns a new lexer with the given position.
     fn advance(&self, amount: usize) -> Lexer {
         let new_position = self.position + amount;
 
