@@ -86,6 +86,12 @@ pub enum Token {
     // ==
     Assign,
 
+    // ||
+    Or,
+
+    // &&
+    And,
+
     // =
     Equals,
 
