@@ -6,7 +6,7 @@ trait Parser {
     /// Gets an updated tree root with the result of this Node.
     ///
     /// Will return the same tree if no more tokens are remaining.
-    fn next_node(&self) -> (AstNode, Self);
+    fn update_tree(&self) -> (AstNode, Self);
 }
 
 /// The implementation struct for the parser.
@@ -41,7 +41,7 @@ impl AstParser {
 }
 
 impl Parser for AstParser {
-    fn next_node(&self) -> (AstNode, Self) {
+    fn update_tree(&self) -> (AstNode, Self) {
         todo!()
     }
 }
