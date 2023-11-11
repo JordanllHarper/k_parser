@@ -47,7 +47,6 @@ pub enum Ident {
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Token {
-    // Anything that isn't a designated token
     // (
     LParen,
 
