@@ -30,4 +30,14 @@ mod parser_tests {
 
         assert_eq!(expected.node_token, node.node_token)
     }
+
+    #[test]
+    fn make_single_node_with_comma() {
+        let tokens: Vec<Token> = vec![Token::Comma];
+        let parser = AstParser::new(tokens);
+        let expected = AstNode::new(Box::new(None), Arc::new(None), Token::Comma);
+        let (node, _parser) = parser.update_tree();
+
+        assert_eq!(expected.node_token, node.node_token)
+    }
 }
