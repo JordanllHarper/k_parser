@@ -6,6 +6,15 @@ mod lexer_symbol_tests {
     };
 
     #[test]
+    fn colon_success() {
+        let lexer = Lexer::new(String::from(":"));
+        let expected = Token::Colon;
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+    #[test]
     fn period_success() {
         let lexer = Lexer::new(String::from("."));
         let expected = Token::Period;
