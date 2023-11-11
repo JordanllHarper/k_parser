@@ -94,6 +94,8 @@ impl Lexer {
                     '!' => self.peek_for_operator('=', Token::Bang, Token::DoesNotEqual),
                     '?' => self.peek_for_operator('.', Token::Question, Token::Safecall),
                     '=' => self.peek_for_operator('=', Token::Assign, Token::Equals),
+                    '|' => self.peek_for_operator('|', Token::Pipe, Token::Or),
+                    '&' => self.peek_for_operator('&', Token::Ampersand, Token::And),
                     _ => {
                         let (lexer, token) = self.read_identifier();
                         return (lexer, Some(token));
