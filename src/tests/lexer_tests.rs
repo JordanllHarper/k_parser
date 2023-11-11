@@ -6,36 +6,6 @@ mod lexer_symbol_tests {
     };
 
     #[test]
-    fn if_success() {
-        let lexer = Lexer::new(String::from("if"));
-        let expected = Token::Identifier(Ident::If);
-
-        let actual = lexer.next_token().1.unwrap();
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn else_success() {
-        let lexer = Lexer::new(String::from("else"));
-        let expected = Token::Identifier(Ident::Else);
-
-        let actual = lexer.next_token().1.unwrap();
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
-    fn when_success() {
-        let lexer = Lexer::new(String::from("when"));
-        let expected = Token::Identifier(Ident::When);
-
-        let actual = lexer.next_token().1.unwrap();
-
-        assert_eq!(expected, actual);
-    }
-
-    #[test]
     fn colon_success() {
         let lexer = Lexer::new(String::from(":"));
         let expected = Token::Colon;
@@ -295,11 +265,49 @@ mod lexer_symbol_tests {
 
         assert_eq!(expected, actual);
     }
+}
+
+#[cfg(test)]
+mod identifier_tests {
+    use crate::{
+        lexer::lexer::Lexer,
+        shared::token::{Ident, Token},
+    };
 
     #[test]
     fn println_success() {
         let lexer = Lexer::new(String::from("println"));
         let expected = Token::Identifier(Ident::NonIdentifiable(String::from("println")));
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn if_success() {
+        let lexer = Lexer::new(String::from("if"));
+        let expected = Token::Identifier(Ident::If);
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn else_success() {
+        let lexer = Lexer::new(String::from("else"));
+        let expected = Token::Identifier(Ident::Else);
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn when_success() {
+        let lexer = Lexer::new(String::from("when"));
+        let expected = Token::Identifier(Ident::When);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -335,6 +343,14 @@ mod lexer_symbol_tests {
 
         assert_eq!(expected, actual);
     }
+}
+
+#[cfg(test)]
+mod iterator_method_tests {
+    use crate::{
+        lexer::lexer::Lexer,
+        shared::token::{Ident, Token},
+    };
 
     #[test]
     fn fun_main_success() {
@@ -370,7 +386,6 @@ mod lexer_symbol_tests {
         let (_, token) = new_lexer.next_token();
         assert_eq!(Token::RParen, token.unwrap());
     }
-
     #[test]
     fn fun_main_lp_rp_block_success() {
         let lexer = Lexer::new("fun main(){}".to_string());
@@ -393,7 +408,6 @@ mod lexer_symbol_tests {
         let (_, token) = new_lexer.next_token();
         assert_eq!(Token::RCurlyBrace, token.unwrap());
     }
-
     #[test]
     fn fun_main_hello_world_block_success() {
         let lexer = Lexer::new("fun main(){println(\"Hello, World!\")}".to_string());
@@ -457,14 +471,6 @@ mod lexer_symbol_tests {
         let (_new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::RCurlyBrace, token.unwrap());
     }
-}
-
-#[cfg(test)]
-mod iterator_method_tests {
-    use crate::{
-        lexer::lexer::Lexer,
-        shared::token::{Ident, Token},
-    };
 
     #[test]
     fn collect_success() {
