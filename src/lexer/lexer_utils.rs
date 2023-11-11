@@ -1,7 +1,5 @@
 use crate::shared::token::Ident;
 
-use super::lexer::Lexer;
-
 /// Returns true if it is an identifier character.
 /// E.g. a-zA-Z or _ -> characters that aren't non identifiable and specific to operations such as
 /// + or -.
