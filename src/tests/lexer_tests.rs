@@ -6,6 +6,36 @@ mod lexer_symbol_tests {
     };
 
     #[test]
+    fn if_success() {
+        let lexer = Lexer::new(String::from("if"));
+        let expected = Token::Identifier(Ident::If);
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn else_success() {
+        let lexer = Lexer::new(String::from("else"));
+        let expected = Token::Identifier(Ident::Else);
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn when_success() {
+        let lexer = Lexer::new(String::from("when"));
+        let expected = Token::Identifier(Ident::When);
+
+        let actual = lexer.next_token().1.unwrap();
+
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
     fn colon_success() {
         let lexer = Lexer::new(String::from(":"));
         let expected = Token::Colon;
