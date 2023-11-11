@@ -3,9 +3,6 @@ use crate::shared::token::Token;
 use super::ast_node::AstNode;
 
 trait Parser {
-    /// Advances the parser state to the next token.
-    fn advance(&self) -> Self;
-
     /// Gets an updated tree root with the result of this Node.
     ///
     /// Will return the same tree if no more tokens are remaining.
@@ -31,9 +28,7 @@ impl AstParser {
             current_token: start_token,
         }
     }
-}
 
-impl Parser for AstParser {
     fn advance(&self) -> Self {
         let new_position = self.current_token_position + 1;
         let new_token = self.tokens.get(new_position);
@@ -43,7 +38,9 @@ impl Parser for AstParser {
             current_token: new_token.cloned(),
         }
     }
+}
 
+impl Parser for AstParser {
     fn next_node(&self) -> (AstNode, Self) {
         todo!()
     }
