@@ -35,6 +35,12 @@ pub enum Ident {
     // when
     When,
 
+    // if
+    If,
+
+    // else
+    Else,
+
     // anything that doesn't match above
     NonIdentifiable(String),
 }
