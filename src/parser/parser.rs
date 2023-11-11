@@ -12,7 +12,19 @@ trait Parser {
     fn next_node(&self) -> (AstNode, Self);
 }
 
+/// The implementation struct for the parser.
+///
+/// Contains the tokens of the building operation and the current position of the parser.
 struct AstParser {
     tokens: Vec<Token>,
     current_token_position: u16,
+}
+
+impl AstParser {
+    fn new(tokens: Vec<Token>, current_token_position: u16) -> Self {
+        Self {
+            tokens,
+            current_token_position,
+        }
+    }
 }
