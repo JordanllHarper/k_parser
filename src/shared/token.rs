@@ -89,9 +89,12 @@ pub enum Token {
     // !=
     DoesNotEqual,
 
-    // see above
+    // see above enum Ident
     Identifier(Ident),
 
     // \n
     Newline,
+
+    // :
+    Colon,
 }
