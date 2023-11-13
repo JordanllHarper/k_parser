@@ -40,9 +40,6 @@ pub enum Keyword {
 
     // else
     Else,
-
-    // anything that doesn't match above
-    NonIdentifiable(String),
 }
 
 #[derive(Debug, PartialEq, Clone)]
