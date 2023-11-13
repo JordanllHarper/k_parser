@@ -9,15 +9,30 @@ use crate::shared::token::Token;
 /// The parent and children will be None if there is none.
 #[derive(Clone, Debug)]
 pub struct AstNode {
-    pub children: Arc<Option<Vec<AstNode>>>,
-    pub node_token: Token,
+    node_type: NodeType,
+}
+
+#[derive(Clone, Debug)]
+pub enum NodeType {
+    Child(Token), // ends of the tree
+    Parent {
+        semantics: ParentSemantics,
+        children: Arc<Vec<AstNode>>,
+    }, // parents that join the end
+}
+
+#[derive(Clone, Debug)]
+pub enum ParentSemantics {
+    Function, // [fun f () { ... }]
+    Identifier,
+    ArgumentList, // fun f [(args...)] { ... }
+    Variable,     // var x = 3
+    Value,        // val y = 42
+    Root,
 }
 
 impl AstNode {
-    pub fn new(children: Arc<Option<Vec<AstNode>>>, node_token: Token) -> Self {
-        Self {
-            children,
-            node_token,
-        }
+    pub fn new(node_type: NodeType) -> Self {
+        Self { node_type }
     }
 }
