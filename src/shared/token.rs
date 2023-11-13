@@ -19,7 +19,7 @@
 ///
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum Ident {
+pub enum Keyword {
     // fun
     Fun,
 
@@ -113,9 +113,11 @@ pub enum Token {
     // !=
     DoesNotEqual,
 
-    // see above enum Ident
-    Identifier(Ident),
+    // see above enum Keyword
+    Keyword(Keyword),
 
+    // Other value - anything not part the language constructs.
+    NonIdentifiable(String),
     // \n
     Newline,
 
