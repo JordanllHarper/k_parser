@@ -14,7 +14,6 @@ pub struct AstNode {
 }
 
 impl AstNode {
-    /// Create a new node of the AST.
     pub fn new(children: Arc<Option<Vec<AstNode>>>, node_token: Token) -> Self {
         Self {
             children,
