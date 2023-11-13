@@ -2,7 +2,7 @@
 mod lexer_symbol_tests {
     use crate::{
         lexer::lexer::Lexer,
-        shared::token::{Ident, Token},
+        shared::token::{Keyword, Token},
     };
 
     #[test]
@@ -105,7 +105,7 @@ mod lexer_symbol_tests {
     #[test]
     fn main_success() {
         let lexer = Lexer::new(String::from("main"));
-        let expected = Token::Identifier(Ident::Main);
+        let expected = Token::Keyword(Keyword::Main);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -271,13 +271,13 @@ mod lexer_symbol_tests {
 mod identifier_tests {
     use crate::{
         lexer::lexer::Lexer,
-        shared::token::{Ident, Token},
+        shared::token::{Keyword, Token},
     };
 
     #[test]
     fn println_success() {
         let lexer = Lexer::new(String::from("println"));
-        let expected = Token::Identifier(Ident::NonIdentifiable(String::from("println")));
+        let expected = Token::Keyword(Keyword::NonIdentifiable(String::from("println")));
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -287,7 +287,7 @@ mod identifier_tests {
     #[test]
     fn if_success() {
         let lexer = Lexer::new(String::from("if"));
-        let expected = Token::Identifier(Ident::If);
+        let expected = Token::Keyword(Keyword::If);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -297,7 +297,7 @@ mod identifier_tests {
     #[test]
     fn else_success() {
         let lexer = Lexer::new(String::from("else"));
-        let expected = Token::Identifier(Ident::Else);
+        let expected = Token::Keyword(Keyword::Else);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -307,7 +307,7 @@ mod identifier_tests {
     #[test]
     fn when_success() {
         let lexer = Lexer::new(String::from("when"));
-        let expected = Token::Identifier(Ident::When);
+        let expected = Token::Keyword(Keyword::When);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -317,7 +317,7 @@ mod identifier_tests {
     #[test]
     fn fn_success() {
         let lexer = Lexer::new(String::from("fun"));
-        let expected = Token::Identifier(Ident::Fun);
+        let expected = Token::Keyword(Keyword::Fun);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -327,7 +327,7 @@ mod identifier_tests {
     #[test]
     fn val_success() {
         let lexer = Lexer::new(String::from("val"));
-        let expected = Token::Identifier(Ident::Val);
+        let expected = Token::Keyword(Keyword::Val);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -337,7 +337,7 @@ mod identifier_tests {
     #[test]
     fn var_success() {
         let lexer = Lexer::new(String::from("var"));
-        let expected = Token::Identifier(Ident::Var);
+        let expected = Token::Keyword(Keyword::Var);
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -349,7 +349,7 @@ mod identifier_tests {
 mod iterator_method_tests {
     use crate::{
         lexer::lexer::Lexer,
-        shared::token::{Ident, Token},
+        shared::token::{Keyword, Token},
     };
 
     #[test]
@@ -358,7 +358,7 @@ mod iterator_method_tests {
 
         //[fun] main
         let (new_lexer, token) = lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Fun), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Fun), token.unwrap());
 
         //fun[]main
         let (new_lexer, token) = new_lexer.next_token();
@@ -367,18 +367,18 @@ mod iterator_method_tests {
         //fun [main]
         let (_new_lexer, token) = new_lexer.next_token();
 
-        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Main), token.unwrap());
     }
 
     #[test]
     fn fun_main_lp_rp_success() {
         let lexer = Lexer::new("fun main()".to_string());
         let (new_lexer, token) = lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Fun), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Fun), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Space, token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Main), token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LParen, token.unwrap());
@@ -390,11 +390,11 @@ mod iterator_method_tests {
     fn fun_main_lp_rp_block_success() {
         let lexer = Lexer::new("fun main(){}".to_string());
         let (new_lexer, token) = lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Fun), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Fun), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Space, token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Main), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LParen, token.unwrap());
 
@@ -413,13 +413,13 @@ mod iterator_method_tests {
         let lexer = Lexer::new("fun main(){println(\"Hello, World!\")}".to_string());
 
         let (new_lexer, token) = lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Fun), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Fun), token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Space, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(Token::Identifier(Ident::Main), token.unwrap());
+        assert_eq!(Token::Keyword(Keyword::Main), token.unwrap());
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::LParen, token.unwrap());
 
@@ -431,7 +431,7 @@ mod iterator_method_tests {
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable(String::from("println"))),
+            Token::Keyword(Keyword::NonIdentifiable(String::from("println"))),
             token.unwrap()
         );
 
@@ -443,7 +443,7 @@ mod iterator_method_tests {
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable("Hello".to_string())),
+            Token::Keyword(Keyword::NonIdentifiable("Hello".to_string())),
             token.unwrap()
         );
 
@@ -455,7 +455,7 @@ mod iterator_method_tests {
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(
-            Token::Identifier(Ident::NonIdentifiable("World".to_string())),
+            Token::Keyword(Keyword::NonIdentifiable("World".to_string())),
             token.unwrap()
         );
 
@@ -477,9 +477,9 @@ mod iterator_method_tests {
         let data = "fun main()";
 
         let expected = vec![
-            Token::Identifier(Ident::Fun),
+            Token::Keyword(Keyword::Fun),
             Token::Space,
-            Token::Identifier(Ident::Main),
+            Token::Keyword(Keyword::Main),
             Token::LParen,
             Token::RParen,
         ];
@@ -494,19 +494,19 @@ mod iterator_method_tests {
         let lexer = Lexer::new("fun main(){println(\"Hello, World!\")}".to_string());
 
         let expected = vec![
-            Token::Identifier(Ident::Fun),
+            Token::Keyword(Keyword::Fun),
             Token::Space,
-            Token::Identifier(Ident::Main),
+            Token::Keyword(Keyword::Main),
             Token::LParen,
             Token::RParen,
             Token::LCurlyBrace,
-            Token::Identifier(Ident::NonIdentifiable(String::from("println"))),
+            Token::Keyword(Keyword::NonIdentifiable(String::from("println"))),
             Token::LParen,
             Token::Quote,
-            Token::Identifier(Ident::NonIdentifiable("Hello".to_string())),
+            Token::Keyword(Keyword::NonIdentifiable("Hello".to_string())),
             Token::Comma,
             Token::Space,
-            Token::Identifier(Ident::NonIdentifiable("World".to_string())),
+            Token::Keyword(Keyword::NonIdentifiable("World".to_string())),
             Token::Bang,
             Token::Quote,
             Token::RParen,
