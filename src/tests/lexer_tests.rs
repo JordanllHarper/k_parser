@@ -277,7 +277,7 @@ mod identifier_tests {
     #[test]
     fn println_success() {
         let lexer = Lexer::new(String::from("println"));
-        let expected = Token::Keyword(Keyword::NonIdentifiable(String::from("println")));
+        let expected = Token::NonIdentifiable(String::from("println"));
 
         let actual = lexer.next_token().1.unwrap();
 
@@ -431,7 +431,7 @@ mod iterator_method_tests {
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(
-            Token::Keyword(Keyword::NonIdentifiable(String::from("println"))),
+            Token::NonIdentifiable(String::from("println")),
             token.unwrap()
         );
 
@@ -442,10 +442,7 @@ mod iterator_method_tests {
         assert_eq!(Token::Quote, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(
-            Token::Keyword(Keyword::NonIdentifiable("Hello".to_string())),
-            token.unwrap()
-        );
+        assert_eq!(Token::NonIdentifiable("Hello".to_string()), token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Comma, token.unwrap());
@@ -454,10 +451,7 @@ mod iterator_method_tests {
         assert_eq!(Token::Space, token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
-        assert_eq!(
-            Token::Keyword(Keyword::NonIdentifiable("World".to_string())),
-            token.unwrap()
-        );
+        assert_eq!(Token::NonIdentifiable("World".to_string()), token.unwrap());
 
         let (new_lexer, token) = new_lexer.next_token();
         assert_eq!(Token::Bang, token.unwrap());
@@ -500,13 +494,13 @@ mod iterator_method_tests {
             Token::LParen,
             Token::RParen,
             Token::LCurlyBrace,
-            Token::Keyword(Keyword::NonIdentifiable(String::from("println"))),
+            Token::NonIdentifiable(String::from("println")),
             Token::LParen,
             Token::Quote,
-            Token::Keyword(Keyword::NonIdentifiable("Hello".to_string())),
+            Token::NonIdentifiable("Hello".to_string()),
             Token::Comma,
             Token::Space,
-            Token::Keyword(Keyword::NonIdentifiable("World".to_string())),
+            Token::NonIdentifiable("World".to_string()),
             Token::Bang,
             Token::Quote,
             Token::RParen,
