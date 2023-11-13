@@ -56,13 +56,11 @@ impl Lexer {
         }
     }
 
-    /// Reads an identifier such as a keyword 'fun' and tokenises
-    fn read_keyword(&self) -> (Lexer, Token) {
-        let (amount_traversed, ident) = seek(self.input.split_at(self.position).1);
+    /// Reads an identifier such as a keyword 'fun', or a non identifiable such as 'hi', and tokenises
+    fn read_keyword_or_non_identifiable(&self) -> (Lexer, Token) {
+        let (amount_traversed, token) = seek(self.input.split_at(self.position).1);
 
         let new_lexer = self.advance(amount_traversed);
-
-        let token = Token::Keyword(ident);
 
         (new_lexer, token)
     }
@@ -105,7 +103,7 @@ impl Lexer {
                     '|' => self.peek_for_operator('|', Token::Pipe, Token::Or),
                     '&' => self.peek_for_operator('&', Token::Ampersand, Token::And),
                     _ => {
-                        let (lexer, token) = self.read_keyword();
+                        let (lexer, token) = self.read_keyword_or_non_identifiable();
                         return (lexer, Some(token));
                     }
                 };
