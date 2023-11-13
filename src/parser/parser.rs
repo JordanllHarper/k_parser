@@ -1,8 +1,8 @@
 use std::sync::Arc;
 
-use crate::shared::token::{Ident, Token};
+use crate::shared::token::{Keyword, Token};
 
-use super::ast_node::AstNode;
+use super::ast_node::{AstNode, NodeType, ParentSemantics};
 
 pub trait Parser {
     /// Gets an updated tree root with the result of this Node.
@@ -27,11 +27,11 @@ impl AstParser {
         let start_token = tokens.get(0);
 
         let start_node = match start_token {
-            Some(token) => AstNode::new(Arc::new(None), token.clone()),
-            None => AstNode::new(
-                Arc::new(None),
-                Token::Identifier(Ident::NonIdentifiable(String::from(""))),
-            ),
+            Some(token) => AstNode::new(NodeType::Parent {
+                semantics: ParentSemantics::Root,
+                children: vec![].into(),
+            }),
+            None => AstNode::new(NodeType::Child(Token::NonIdentifiable("".to_string()))),
         };
         Self {
             tokens: tokens.clone(),
