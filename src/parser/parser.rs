@@ -8,7 +8,7 @@ pub trait Parser {
     /// Gets an updated tree root with the result of this Node.
     ///
     /// Will return the same tree if no more tokens are remaining.
-    fn update_tree(&self) -> (AstNode, Self);
+    fn update_tree(self) -> (AstNode, Self);
 }
 
 /// The implementation struct for the parser.
@@ -41,11 +41,13 @@ impl AstParser {
         }
     }
 
-    fn advance(&self) -> Self {
+    fn advance(self) -> AstParser {
         let new_position = self.current_token_position + 1;
-        let new_token = self.tokens.get(new_position);
-        Self {
-            tokens: self.tokens.clone(),
+        let tokens = self.tokens;
+        let tokens_binding = tokens.clone();
+        let new_token = tokens_binding.get(new_position).clone();
+        AstParser {
+            tokens,
             current_token_position: new_position,
             current_token: new_token.cloned(),
             current_tree_root: self.current_tree_root.clone(),
@@ -54,8 +56,9 @@ impl AstParser {
 }
 
 impl Parser for AstParser {
-    fn update_tree(&self) -> (AstNode, Self) {
+    fn update_tree(self) -> (AstNode, AstParser) {
+        let previous_root = &self.current_tree_root.to_owned();
         let new_parser = self.advance();
-        (new_parser.current_tree_root.clone(), new_parser)
+        (previous_root.clone(), new_parser)
     }
 }
