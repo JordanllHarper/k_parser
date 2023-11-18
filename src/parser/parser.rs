@@ -58,6 +58,11 @@ impl AstParser {
 impl Parser for AstParser {
     fn update_tree(self) -> (AstNode, AstParser) {
         let previous_root = &self.current_tree_root.to_owned();
+
+        // TODO: Update previously added children with
+        // new node status if not already done so
+        // TODO: add new node to copied tree
+
         let new_parser = self.advance();
         (previous_root.clone(), new_parser)
     }
