@@ -7,12 +7,12 @@ use crate::shared::token::Token;
 /// Contains a token, the parent and the child of this node.
 ///
 /// The parent and children will be None if there is none.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct AstNode {
     node_type: NodeType,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum NodeType {
     Child(Token), // ends of the tree
     Parent {
@@ -21,7 +21,7 @@ pub enum NodeType {
     }, // parents that join the end
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum ParentSemantics {
     Function, // [fun f () { ... }]
     Identifier,
