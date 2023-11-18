@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::shared::token::{Keyword, Token};
+use crate::shared::token::Token;
 
 use super::ast_node::{AstNode, NodeType, ParentSemantics};
 
@@ -24,12 +24,12 @@ pub struct AstParser {
 
 impl AstParser {
     pub fn new(tokens: Vec<Token>) -> Self {
-        let start_token = tokens.get(0);
+        let start_token = tokens.get(0).to_owned();
 
-        let start_node = match start_token {
+        let start_node = match start_token.cloned() {
             Some(token) => AstNode::new(NodeType::Parent {
                 semantics: ParentSemantics::Root,
-                children: vec![].into(),
+                children: Arc::new(vec![AstNode::new(NodeType::Child(token))]),
             }),
             None => AstNode::new(NodeType::Child(Token::NonIdentifiable("".to_string()))),
         };
@@ -45,11 +45,11 @@ impl AstParser {
         let new_position = self.current_token_position + 1;
         let tokens = self.tokens;
         let tokens_binding = tokens.clone();
-        let new_token = tokens_binding.get(new_position).clone();
+        let new_token = tokens_binding.get(new_position).cloned();
         AstParser {
             tokens,
             current_token_position: new_position,
-            current_token: new_token.cloned(),
+            current_token: new_token,
             current_tree_root: self.current_tree_root.clone(),
         }
     }
