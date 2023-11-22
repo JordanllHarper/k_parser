@@ -29,7 +29,6 @@ impl AstParser {
 
         let start_node = match start_token.cloned() {
             Some(token) => AstNode::new(NodeType::Parent {
-                semantics: ParentSemantics::Root,
                 children: Arc::new(vec![AstNode::new(NodeType::Child(token))]),
             }),
             None => AstNode::new(NodeType::Child(Token::NonIdentifiable("".to_string()))),
@@ -54,14 +53,18 @@ impl AstParser {
             current_tree_root: self.current_tree_root.clone(),
         }
     }
+    /// Iterates through the tree and inserts the child
+    /// Inserts new node at the end of the last child
+    fn iterate_node(node: AstNode, node_to_add: Option<AstNode>) -> SemanticAstNode {
+        todo!()
+    }
 }
 
 impl Parser for AstParser {
+    type Node = AstNode;
     fn update_tree(self) -> (AstNode, AstParser) {
         let previous_root = &self.current_tree_root.to_owned();
 
-        // TODO: Update previously added children with
-        // new node status if not already done so
         // TODO: add new node to copied tree
 
         let new_parser = self.advance();
