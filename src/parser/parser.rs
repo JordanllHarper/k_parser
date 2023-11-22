@@ -2,13 +2,14 @@ use std::sync::Arc;
 
 use crate::shared::token::Token;
 
-use super::ast_node::{AstNode, NodeType, ParentSemantics};
+use super::ast_node::{AstNode, NodeType, SemanticAstNode};
 
 pub trait Parser {
+    type Node;
     /// Gets an updated tree root with the result of this Node.
     ///
     /// Will return the same tree if no more tokens are remaining.
-    fn update_tree(self) -> (AstNode, Self);
+    fn update_tree(self) -> (Self::Node, Self);
 }
 
 /// The implementation struct for the parser.
