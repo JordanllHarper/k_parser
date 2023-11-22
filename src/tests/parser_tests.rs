@@ -5,7 +5,8 @@ pub mod parser_tests {
     use crate::{
         parser::{
             ast_node::{AstNode, NodeType},
-            parser::{AstParser, Parser},
+            non_semantic::parser::AstNodeParser,
+            parser::Parser,
         },
         shared::token::*,
     };
@@ -13,7 +14,7 @@ pub mod parser_tests {
     #[test]
     fn init_initial_pass() {
         let test_data = vec![Token::Keyword(Keyword::Fun)];
-        let parser = AstParser::new(test_data);
+        let parser = AstNodeParser::new(test_data);
         let expected = AstNode::new(NodeType::Parent {
             children: Arc::new(vec![AstNode::new(NodeType::Child(Token::Keyword(
                 Keyword::Fun,
